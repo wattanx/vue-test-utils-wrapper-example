@@ -1,0 +1,26 @@
+{
+  "name": "vue-test-utils-wrapper-example",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage",
+    "build": "nuxt build",
+    "prepare": "nuxi prepare"
+  },
+  "devDependencies": {
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-28071266.dab55db",
+    "@nuxt/types": "^2.16.3",
+    "@nuxtjs/composition-api": "^0.33.1",
+    "@vitejs/plugin-vue2": "2.2.0",
+    "@vitest/ui": "0.31.1",
+    "@vue/test-utils": "1.3.5",
+    "jsdom": "latest",
+    "nuxt": "2.16.3",
+    "vite": "latest",
+    "vitest": "0.31.1",
+    "vue": "2.7.14",
+    "vue-template-compiler": "^2.7.14",
+    "vuex": "3.6.1"
+  }
+}
