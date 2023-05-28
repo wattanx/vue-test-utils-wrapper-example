@@ -1,4 +1,5 @@
-import type { MountOptions } from "@vue/test-utils";
+import Vue from "vue";
+import type { MountOptions, Wrapper } from "@vue/test-utils";
 import { mount, shallowMount, createLocalVue } from "@vue/test-utils";
 import type { Component } from "vue";
 
@@ -52,18 +53,39 @@ export type GlobalMountOptions = {
 };
 
 export interface WrapperMountOptions
-  extends Omit<MountOptions<Vue>, "propsData"> {
+  extends Omit<
+    MountOptions<Vue>,
+    "propsData" | "mocks" | "stubs" | "localVue"
+  > {
   /** @deprecated use props instead. */
   propsData?: Record<string, any>;
   props?: Record<string, any>;
   globals?: GlobalMountOptions;
+
+  /**
+   * @deprecated use `globals.mocks` instead.
+   */
+  mocks?: Record<string, any>;
+
+  /**
+   * @deprecated use `globals.stubs` instead.
+   */
+  stubs?: Record<string, any>;
+}
+
+export interface WrapperMountReturnType extends Omit<Wrapper<Vue>, "destroy"> {
+  /**
+   * @deprecated use `unmount` instead.
+   */
+  destroy: () => void;
+  unmount: () => void;
 }
 
 export async function mountWrapper(
   component: any,
   options: WrapperMountOptions,
   shallow: boolean = false
-) {
+): Promise<WrapperMountReturnType> {
   const localVue = createLocalVue();
 
   if (options.globals && options.globals.plugins) {
@@ -87,7 +109,14 @@ export async function mountWrapper(
     delete options.props;
   }
 
+  // @ts-ignore
   options.localVue = localVue;
 
-  return shallow ? shallowMount(component, options) : mount(component, options);
+  const wrapper = shallow
+    ? shallowMount(component, options)
+    : mount(component, options);
+
+  return Object.assign(wrapper, {
+    unmount: () => wrapper.destroy(),
+  });
 }
